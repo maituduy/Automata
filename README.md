@@ -6,6 +6,8 @@
 
 `nfa.toFile("nfa.gv");` // Lưu graph vào file Graphviz
 
+`NFA dfa = nfa.toDFA();` // Tạo DFA từ NFA
+
 `dot -T png nfa.gv -O` // run file Graphviz (output là file png hiển thị graph)
 
 Example: 
