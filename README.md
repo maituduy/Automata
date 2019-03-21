@@ -10,6 +10,13 @@
 
 `dot -T png nfa.gv -O` // run file Graphviz (output là file png hiển thị graph)
 
+### Update Python code
+Requirements:
+  * graphviz==0.8.4
+  * beautifultable==0.7.0
+
+Run: `python nfatodfa.py --nfa_path=test.txt` 
+
 Example: 
 
 NFA
