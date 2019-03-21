@@ -1,0 +1,2 @@
+graphviz==0.8.4
+beautifultable==0.7.0
