@@ -17,6 +17,8 @@ Requirements:
 
 Run: `python nfatodfa.py --nfa_path=test.txt` 
 
+Algorithm: https://www.youtube.com/watch?v=jN8zvENdjBg
+
 Example: 
 
 NFA
