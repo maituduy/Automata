@@ -1,4 +1,4 @@
-# Automata
+# NFA to DFA
 
 `nfa.initGraph("./src/test.txt");` // Khởi tạo graph từ file
 
@@ -15,7 +15,7 @@ Requirements:
   * graphviz==0.8.4
   * beautifultable==0.7.0
 
-Run: `python nfatodfa.py --nfa_path=test.txt` 
+Run: `python Automata.py --nfa_path=test.txt` 
 
 Algorithm: https://www.youtube.com/watch?v=jN8zvENdjBg
 
@@ -26,3 +26,9 @@ NFA
 
 DFA
 ![DFA](https://github.com/maituduy/Automata/blob/master/Example/dfa.gv.png?raw=true)
+
+# Minimization DFA
+
+Run: `python Minimization.py` 
+
+Algorithm: https://www.youtube.com/watch?v=UiXkJUTkp44
