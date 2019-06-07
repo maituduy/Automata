@@ -5,9 +5,15 @@ class Minimization():
 
     def __init__(self, dfa):
         self.dfa = dfa
-        self.table = {}
+        self.table = self.create_table()
     
     def minimize(self):
+        new_states = self.get_new_states()
+        new_states = self.combine_states(new_states)
+        graph = self.create_graph(new_states)
+        return Automata(graph)
+
+    def create_table(self):
         states = self.dfa.graph['states_name']
         end_states = self.dfa.graph['end']
         n_states = len(states)
@@ -22,15 +28,8 @@ class Minimization():
                     status[states[j]] = 0
             table[states[i]] = status
         
-        # print("iter1 table")
-        # self.print_table()
         table = self.fill_table(table)
-        # print("Last iter table")
-        # self.print_table()
-        new_states = self.get_new_states(table)
-        new_states = self.combine_states(new_states)
-        graph = self.create_graph(new_states)
-        return Automata(graph)
+        return table
 
     def create_graph(self, states):
         begin_state = self.dfa.graph['start']
@@ -88,45 +87,49 @@ class Minimization():
         self.table = table
         return table
 
-    def get_new_states(self, table):
+    def get_new_states(self):
         s = set()
         new_states = []
         all_states = self.dfa.graph['states_name']
 
-        for k, v in table.items():
+        for k, v in self.table.items():
             for k1, v1 in v.items():
                 if v1 == 0:
                     new_states.append([k,k1])
                     s.add(k)
-                    s.add(k1)       
+                    s.add(k1)
         for state in all_states:
             if state not in s:
                 new_states.append([state])
-
         return new_states
 
     def combine_states(self, states):
+        import queue
         new_states = []
-        for i in range(len(states)-1):
-            if len(states[i]) == 2:
-                for j in range(i+1,len(states)):
-                    if len(states[j]) == 2:
-                        if len(set(states[i]).intersection(states[j])) > 0:
-                            new_states.append(list(set(states[i]+states[j])))
-                        else:
-                            new_states.append(states[i])
-                    else:
-                        new_states.append(states[i])
+        temp = []
+        for state in states:
+            if len(state) == 1:
+                new_states.append(state)
             else:
-                new_states.append(states[i])
-        if len(states[len(states)-1]) == 1:
-            new_states.append(states[len(states)-1])
-        
-        unique_states = []
-        for state in new_states:
-            if sorted(state) not in unique_states:
-                unique_states.append(sorted(state))
-        return unique_states
+                temp.append(state)
+        if len(temp) == 0:
+            return states
+
+        q = queue.Queue()
+        q.put(temp[0])
+        while not q.empty():
+            state = q.get()
+            temp_states = [state]
+            for i in range(1, len(temp)):
+                if len(set(temp[i]).intersection(state)) > 0:
+                    state = list(set(temp[i]+state))
+                    temp_states.append(temp[i])
+                elif q.empty():
+                    q.put(temp[i])
+            new_states.append(state)
+            temp = [x for x in temp if x not in temp_states]
+
+        return new_states
 
     def print_table(self):
         pp = pprint.PrettyPrinter()
@@ -136,8 +139,10 @@ if __name__ == "__main__":
     nfa = Automata()
     nfa.getGraphFromFile("test.txt")
     dfa = nfa.toDFA()
+    # dfa.printGraph()
     m = Minimization(dfa)
+    # m.print_table()
     mdfa = m.minimize()
     mdfa.printStateTable()
     mdfa.printGraph()
-    # mdfa.render(path)
+    # mdfa.render("mtest/dfa")
