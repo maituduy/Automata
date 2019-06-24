@@ -1,0 +1,223 @@
+Terminals unused in grammar
+
+   T_SPACE
+
+
+Grammar
+
+    0 $accept: calculation $end
+
+    1 calculation: %empty
+    2            | calculation line
+
+    3 line: T_LEFT arr T_RIGHT T_NEWLINE
+    4     | T_QUIT T_NEWLINE
+
+    5 arr: %empty
+    6    | T_WS
+    7    | T_POSITIVE cmi
+    8    | T_NEGATIVE cmi
+
+    9 cmi: %empty
+   10    | T_COMMA T_POSITIVE cmi
+   11    | T_COMMA T_NEGATIVE cmi
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+T_POSITIVE <ival> (258) 7 10
+T_COMMA (259) 10 11
+T_NEGATIVE (260) 8 11
+T_LEFT (261) 3
+T_RIGHT (262) 3
+T_NEWLINE (263) 3 4
+T_QUIT (264) 4
+T_SPACE (265)
+T_WS (266) 6
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+calculation (13)
+    on left: 1 2, on right: 0 2
+line (14)
+    on left: 3 4, on right: 2
+arr <ival> (15)
+    on left: 5 6 7 8, on right: 3
+cmi <ival> (16)
+    on left: 9 10 11, on right: 7 8 10 11
+
+
+State 0
+
+    0 $accept: . calculation $end
+
+    $default  reduce using rule 1 (calculation)
+
+    calculation  go to state 1
+
+
+State 1
+
+    0 $accept: calculation . $end
+    2 calculation: calculation . line
+
+    $end    shift, and go to state 2
+    T_LEFT  shift, and go to state 3
+    T_QUIT  shift, and go to state 4
+
+    line  go to state 5
+
+
+State 2
+
+    0 $accept: calculation $end .
+
+    $default  accept
+
+
+State 3
+
+    3 line: T_LEFT . arr T_RIGHT T_NEWLINE
+
+    T_POSITIVE  shift, and go to state 6
+    T_NEGATIVE  shift, and go to state 7
+    T_WS        shift, and go to state 8
+
+    $default  reduce using rule 5 (arr)
+
+    arr  go to state 9
+
+
+State 4
+
+    4 line: T_QUIT . T_NEWLINE
+
+    T_NEWLINE  shift, and go to state 10
+
+
+State 5
+
+    2 calculation: calculation line .
+
+    $default  reduce using rule 2 (calculation)
+
+
+State 6
+
+    7 arr: T_POSITIVE . cmi
+
+    T_COMMA  shift, and go to state 11
+
+    $default  reduce using rule 9 (cmi)
+
+    cmi  go to state 12
+
+
+State 7
+
+    8 arr: T_NEGATIVE . cmi
+
+    T_COMMA  shift, and go to state 11
+
+    $default  reduce using rule 9 (cmi)
+
+    cmi  go to state 13
+
+
+State 8
+
+    6 arr: T_WS .
+
+    $default  reduce using rule 6 (arr)
+
+
+State 9
+
+    3 line: T_LEFT arr . T_RIGHT T_NEWLINE
+
+    T_RIGHT  shift, and go to state 14
+
+
+State 10
+
+    4 line: T_QUIT T_NEWLINE .
+
+    $default  reduce using rule 4 (line)
+
+
+State 11
+
+   10 cmi: T_COMMA . T_POSITIVE cmi
+   11    | T_COMMA . T_NEGATIVE cmi
+
+    T_POSITIVE  shift, and go to state 15
+    T_NEGATIVE  shift, and go to state 16
+
+
+State 12
+
+    7 arr: T_POSITIVE cmi .
+
+    $default  reduce using rule 7 (arr)
+
+
+State 13
+
+    8 arr: T_NEGATIVE cmi .
+
+    $default  reduce using rule 8 (arr)
+
+
+State 14
+
+    3 line: T_LEFT arr T_RIGHT . T_NEWLINE
+
+    T_NEWLINE  shift, and go to state 17
+
+
+State 15
+
+   10 cmi: T_COMMA T_POSITIVE . cmi
+
+    T_COMMA  shift, and go to state 11
+
+    $default  reduce using rule 9 (cmi)
+
+    cmi  go to state 18
+
+
+State 16
+
+   11 cmi: T_COMMA T_NEGATIVE . cmi
+
+    T_COMMA  shift, and go to state 11
+
+    $default  reduce using rule 9 (cmi)
+
+    cmi  go to state 19
+
+
+State 17
+
+    3 line: T_LEFT arr T_RIGHT T_NEWLINE .
+
+    $default  reduce using rule 3 (line)
+
+
+State 18
+
+   10 cmi: T_COMMA T_POSITIVE cmi .
+
+    $default  reduce using rule 10 (cmi)
+
+
+State 19
+
+   11 cmi: T_COMMA T_NEGATIVE cmi .
+
+    $default  reduce using rule 11 (cmi)
